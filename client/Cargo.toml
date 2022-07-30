@@ -1,14 +1,13 @@
 [package]
 name = "zeke-contract"
 version = "0.1.0"
-edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+edition = "2021"
 
 [dependencies]
-solana-sdk = { git = "https://github.com/solana-labs/solana.git", version = "1.11.5" }
-solana-client = { git = "https://github.com/solana-labs/solana.git", version = "1.11.5" }
-yaml-rust = "0.4"
-thiserror = "1"
-home = "0.5.3"
 borsh = "0.9.1"
+clap = { version = "3.1.5", features = ["cargo", "env"] }
+home = "0.5.3"
+solana-client = { git = "https://github.com/dmakarov/solana.git", version = "1.11.5" }
+solana-sdk = { git = "https://github.com/dmakarov/solana.git", version = "1.11.5" }
+thiserror = "1"
+yaml-rust = "0.4"

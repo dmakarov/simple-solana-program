@@ -12,12 +12,18 @@ use solana_sdk::transaction::Transaction;
 /// `solana config set --url <URL>`. Information about what cluster
 /// has been configured is gleened from the solana config file
 /// `~/.config/solana/cli/config.yml`.
-pub fn establish_connection() -> Result<RpcClient> {
-    let rpc_url = utils::get_rpc_url()?;
-    Ok(RpcClient::new_with_commitment(
-        rpc_url,
-        CommitmentConfig::confirmed(),
-    ))
+pub fn establish_connection(url: &Option<String>) -> Result<RpcClient> {
+    let rpc_url = match url {
+        Some(x) => {
+            if x == "localhost" {
+                "http://localhost:8899".to_string()
+            } else {
+                String::from(x)
+            }
+        },
+        None => utils::get_rpc_url()?
+    };
+    Ok(RpcClient::new_with_commitment(rpc_url, CommitmentConfig::confirmed()))
 }
 
 /// Determines the amount of lamports that will be required to execute

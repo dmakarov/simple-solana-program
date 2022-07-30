@@ -1,26 +1,24 @@
 #!/bin/bash
 
-function build_bpf() {
-    cargo build-bpf --manifest-path=program/Cargo.toml --bpf-out-dir=dist/program
+function build_sbf() {
+    cargo build-sbf --manifest-path=program/Cargo.toml
 }
 
 case $1 in
-    "build-bpf")
-	build_bpf
+    "build-sbf")
+	build_sbf
 	;;
     "deploy")
-	build_bpf
-	solana program deploy dist/program/helloworld.so
+	build_sbf
+	solana program deploy -u localhost program/target/deploy/helloworld.so
 	;;
     "client")
-	(cd client/; cargo run ../dist/program/helloworld-keypair.json)
+	(cd client/; cargo run -- -k ../program/target/deploy/helloworld-keypair.json -u localhost)
 	;;
     "clean")
-	(cd program/; cargo clean)
-	(cd client/; cargo clean)
-	rm -rf dist/
+	git clean -fdx
 	;;
     *)
-	echo "usage: $0 build-bpf"
+	echo "usage: $0 build-sbf"
 	;;
 esac
