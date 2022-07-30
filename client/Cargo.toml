@@ -6,8 +6,8 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-solana-sdk = "1"
-solana-client = "1"
+solana-sdk = { git = "https://github.com/solana-labs/solana.git", version = "1.11.5" }
+solana-client = { git = "https://github.com/solana-labs/solana.git", version = "1.11.5" }
 yaml-rust = "0.4"
 thiserror = "1"
 home = "0.5.3"

@@ -130,7 +130,7 @@ pub fn create_greeting_account(
         );
         let message = Message::new(&[instruction], Some(&player.pubkey()));
         let transaction =
-            Transaction::new(&[player], message, connection.get_recent_blockhash()?.0);
+            Transaction::new(&[player], message, connection.get_latest_blockhash()?);
 
         connection.send_and_confirm_transaction(&transaction)?;
     }
@@ -157,7 +157,7 @@ pub fn say_hello(player: &Keypair, program: &Keypair, connection: &RpcClient) ->
         vec![AccountMeta::new(greeting_pubkey, false)],
     );
     let message = Message::new(&[instruction], Some(&player.pubkey()));
-    let transaction = Transaction::new(&[player], message, connection.get_recent_blockhash()?.0);
+    let transaction = Transaction::new(&[player], message, connection.get_latest_blockhash()?);
 
     connection.send_and_confirm_transaction(&transaction)?;
 

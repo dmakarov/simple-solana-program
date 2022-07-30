@@ -16,7 +16,7 @@ edition = "2018"
 exclude_entrypoint = []
 
 [dependencies]
-solana-program = "1"
+solana-program = { git = "https://github.com/solana-labs/solana.git", version = "1.11.5" }
 borsh = "0.9.1"
 
 [lib]

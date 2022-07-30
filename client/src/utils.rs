@@ -52,17 +52,13 @@ pub fn get_rpc_url() -> Result<String> {
 /// on the machine.
 pub fn get_player() -> Result<Keypair> {
     let config = get_config()?;
-    let path = match config["keypair_path"].as_str() {
-        Some(s) => s,
-        None => {
-            return Err(Error::InvalidConfig(
-                "missing `keypair_path` field".to_string(),
-            ))
-        }
-    };
-    read_keypair_file(path).map_err(|e| {
-        Error::InvalidConfig(format!("failed to read keypair file ({}): ({})", path, e))
-    })
+    if let Some(path) = config["keypair_path"].as_str() {
+        read_keypair_file(path).map_err(|e| {
+            Error::InvalidConfig(format!("failed to read keypair file ({}): ({})", path, e))
+        })
+    } else {
+        Err(Error::InvalidConfig("missing `keypair_path` field".to_string()))
+    }
 }
 
 /// Gets the seed used to generate greeting accounts. If you'd like to
