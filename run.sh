@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function build_sbf() {
-    cargo build-sbf --manifest-path=program/Cargo.toml
+    RUST_LOG=info cargo build-sbf --manifest-path=program/Cargo.toml
 }
 
 case $1 in
