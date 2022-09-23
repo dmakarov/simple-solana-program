@@ -10,7 +10,7 @@ case $1 in
 	;;
     "deploy")
 	build_sbf
-	solana program deploy -u localhost program/target/deploy/helloworld.so
+	solana program deploy --use-quic -u localhost program/target/deploy/helloworld.so
 	;;
     "client")
 	(cd client/; cargo run -- -k ../program/target/deploy/helloworld-keypair.json -u localhost)

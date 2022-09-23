@@ -157,9 +157,10 @@ pub fn say_hello(player: &Keypair, program: &Keypair, connection: &RpcClient) ->
     // in as one of the accounts arguents which the program will
     // handle.
 
+    let data = [1u8];
     let instruction = Instruction::new_with_bytes(
         program.pubkey(),
-        &[],
+        &data,
         vec![AccountMeta::new(greeting_pubkey, false)],
     );
     let message = Message::new(&[instruction], Some(&player.pubkey()));
