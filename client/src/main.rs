@@ -8,6 +8,14 @@ fn main() {
         .about(crate_description!())
         .version(version.as_str())
         .arg(
+            Arg::new("config")
+                .long("config")
+                .short('C')
+                .takes_value(true)
+                .value_name("CONFIG")
+                .help("Config filepath"),
+        )
+        .arg(
             Arg::new("keypair")
                 .long("keypair")
                 .short('k')
@@ -31,9 +39,10 @@ fn main() {
                 .help("Use verbose output"),
         )
         .get_matches_from(args);
+    let config: Option<String> = matches.value_of_t("config").ok();
     let keypair: String = matches.value_of_t_or_exit("keypair");
     let url: Option<String> = matches.value_of_t("url").ok();
-    let connection = client::client::establish_connection(&url).unwrap();
+    let connection = client::client::establish_connection(&url, &config).unwrap();
     println!(
         "Connected to remote solana node running version ({}).",
         connection.get_version().unwrap()
@@ -43,7 +52,7 @@ fn main() {
         "({}) lamports are required for this transaction.",
         balance_requirement
     );
-    let player = client::utils::get_player().unwrap();
+    let player = client::utils::get_player(&config).unwrap();
     let player_balance = client::client::get_player_balance(&player, &connection).unwrap();
     println!("({}) lamports are owned by player.", player_balance);
     if player_balance < balance_requirement {

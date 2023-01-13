@@ -12,7 +12,7 @@ use solana_sdk::transaction::Transaction;
 /// `solana config set --url <URL>`. Information about what cluster
 /// has been configured is gleened from the solana config file
 /// `~/.config/solana/cli/config.yml`.
-pub fn establish_connection(url: &Option<String>) -> Result<RpcClient> {
+pub fn establish_connection(url: &Option<String>, config: &Option<String>) -> Result<RpcClient> {
     let rpc_url = match url {
         Some(x) => {
             if x == "localhost" {
@@ -21,7 +21,7 @@ pub fn establish_connection(url: &Option<String>) -> Result<RpcClient> {
                 String::from(x)
             }
         },
-        None => utils::get_rpc_url()?
+        None => utils::get_rpc_url(config)?
     };
     Ok(RpcClient::new_with_commitment(rpc_url, CommitmentConfig::confirmed()))
 }

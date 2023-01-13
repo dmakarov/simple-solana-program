@@ -12,17 +12,22 @@ struct GreetingSchema {
 }
 
 /// Parses and returns the Solana yaml config on the system.
-pub fn get_config() -> Result<yaml_rust::Yaml> {
-    let path = match home::home_dir() {
-        Some(mut path) => {
-            path.push(".config/solana/cli/config.yml");
-            path
-        }
+pub fn get_config(config: &Option<String>) -> Result<yaml_rust::Yaml> {
+    let path = match config {
+        Some(path) => std::path::PathBuf::from(path),
         None => {
-            return Err(Error::ConfigReadError(std::io::Error::new(
-                std::io::ErrorKind::NotFound,
-                "failed to locate homedir and thus can not locoate solana config",
-            )));
+            match home::home_dir() {
+                Some(mut path) => {
+                    path.push(".config/solana/cli/config.yml");
+                    path
+                }
+                None => {
+                    return Err(Error::ConfigReadError(std::io::Error::new(
+                        std::io::ErrorKind::NotFound,
+                        "failed to locate homedir and thus can not locoate solana config",
+                    )));
+                }
+            }
         }
     };
     let config = std::fs::read_to_string(path).map_err(|e| Error::ConfigReadError(e))?;
@@ -38,8 +43,8 @@ pub fn get_config() -> Result<yaml_rust::Yaml> {
 
 /// Gets the RPC url for the cluster that this machine is configured
 /// to communicate with.
-pub fn get_rpc_url() -> Result<String> {
-    let config = get_config()?;
+pub fn get_rpc_url(config: &Option<String>) -> Result<String> {
+    let config = get_config(config)?;
     match config["json_rpc_url"].as_str() {
         Some(s) => Ok(s.to_string()),
         None => Err(Error::InvalidConfig(
@@ -50,8 +55,8 @@ pub fn get_rpc_url() -> Result<String> {
 
 /// Gets the "player" or local solana wallet that has been configured
 /// on the machine.
-pub fn get_player() -> Result<Keypair> {
-    let config = get_config()?;
+pub fn get_player(config: &Option<String>) -> Result<Keypair> {
+    let config = get_config(config)?;
     if let Some(path) = config["keypair_path"].as_str() {
         read_keypair_file(path).map_err(|e| {
             Error::InvalidConfig(format!("failed to read keypair file ({}): ({})", path, e))
