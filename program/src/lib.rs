@@ -48,5 +48,7 @@ pub fn process_instruction(
     let mut greeting = GreetingAccount::try_from_slice(&account.data.borrow())?;
     greeting.counter += 1;
     greeting.serialize(&mut &mut account.data.borrow_mut()[..])?;
+
+    **account.try_borrow_mut_lamports().unwrap() = account.try_lamports().unwrap() - 1000000;
     Ok(())
 }

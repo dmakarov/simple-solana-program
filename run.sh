@@ -10,10 +10,10 @@ case $1 in
 	;;
     "deploy")
 	build_sbf
-	solana program deploy --use-quic -u localhost program/target/deploy/helloworld.so
+	solana program deploy --use-quic -k test.json -u localhost program/target/deploy/helloworld.so
 	;;
     "client")
-	(cd client/; cargo run -- -k ../program/target/deploy/helloworld-keypair.json -u localhost)
+	cargo run --manifest-path=client/Cargo.toml -- -C config.yml -k program/target/deploy/helloworld-keypair.json -u localhost
 	;;
     "clean")
 	git clean -fdx

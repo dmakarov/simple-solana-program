@@ -1,5 +1,6 @@
 use clap::{crate_description, crate_name, crate_version, Arg};
 use client;
+use solana_sdk::signature::Signer;
 
 fn main() {
     let version = format!("{}", crate_version!());
@@ -64,7 +65,13 @@ fn main() {
         client::client::request_airdrop(&player, &connection, request).unwrap();
     }
     let program = client::client::get_program(&keypair, &connection).unwrap();
+
     client::client::create_greeting_account(&player, &program, &connection).unwrap();
+
+    let greeting_pubkey = client::utils::get_greeting_public_key(&player.pubkey(), &program.pubkey()).unwrap();
+    let greeting_account_balance = connection.get_balance(&greeting_pubkey).unwrap();
+    println!("Greeting account balance {greeting_account_balance} lamports");
+
     client::client::say_hello(&player, &program, &connection).unwrap();
     println!(
         "({}) greetings have been sent.",
