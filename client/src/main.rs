@@ -70,11 +70,14 @@ fn main() {
 
     let greeting_pubkey = client::utils::get_greeting_public_key(&player.pubkey(), &program.pubkey()).unwrap();
     let greeting_account_balance = connection.get_balance(&greeting_pubkey).unwrap();
-    println!("Greeting account balance {greeting_account_balance} lamports");
+    println!("Greeting account balance before saying hello {greeting_account_balance} lamports");
 
     client::client::say_hello(&player, &program, &connection).unwrap();
     println!(
         "({}) greetings have been sent.",
         client::client::count_greetings(&player, &program, &connection).unwrap()
-    )
+    );
+
+    let greeting_account_balance = connection.get_balance(&greeting_pubkey).unwrap();
+    println!("Greeting account balance after saying hello {greeting_account_balance} lamports")
 }

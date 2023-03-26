@@ -35,6 +35,7 @@ pub fn process_instruction(
     // Get the account that stores greeting count information.
     let accounts_iter = &mut accounts.iter();
     let account = next_account_info(accounts_iter)?;
+    let player = next_account_info(accounts_iter)?;
 
     // The account must be owned by the program in order for the
     // program to write to it. If that is not the case then the
@@ -49,6 +50,8 @@ pub fn process_instruction(
     greeting.counter += 1;
     greeting.serialize(&mut &mut account.data.borrow_mut()[..])?;
 
-    **account.try_borrow_mut_lamports().unwrap() = account.try_lamports().unwrap() - 1000000;
+    **player.try_borrow_mut_lamports().unwrap() += 10;
+    **account.try_borrow_mut_lamports().unwrap() -= 10;
+
     Ok(())
 }

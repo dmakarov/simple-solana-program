@@ -130,7 +130,7 @@ pub fn create_greeting_account(
             &greeting_pubkey,
             &player.pubkey(),
             utils::get_greeting_seed(),
-            lamport_requirement,
+            lamport_requirement + 1000,
             utils::get_greeting_data_size()? as u64,
             &program.pubkey(),
         );
@@ -161,7 +161,10 @@ pub fn say_hello(player: &Keypair, program: &Keypair, connection: &RpcClient) ->
     let instruction = Instruction::new_with_bytes(
         program.pubkey(),
         &data,
-        vec![AccountMeta::new(greeting_pubkey, false)],
+        vec![
+            AccountMeta::new(greeting_pubkey, false),
+            AccountMeta::new(player.pubkey(), true),
+        ],
     );
     let message = Message::new(&[instruction], Some(&player.pubkey()));
     let transaction = Transaction::new(&[player], message, connection.get_latest_blockhash()?);
