@@ -47,12 +47,13 @@ fn main() {
         "Connected to remote solana node running version ({}).",
         connection.get_version().unwrap()
     );
+    let player = client::utils::get_player(&config).unwrap();
+    let program = client::client::get_program(&keypair, &connection).unwrap();
     let balance_requirement = client::client::get_balance_requirement(&connection).unwrap();
     println!(
         "({}) lamports are required for this transaction.",
         balance_requirement
     );
-    let player = client::utils::get_player(&config).unwrap();
     let player_balance = client::client::get_player_balance(&player, &connection).unwrap();
     println!("({}) lamports are owned by player.", player_balance);
     if player_balance < balance_requirement {
@@ -63,7 +64,6 @@ fn main() {
         );
         client::client::request_airdrop(&player, &connection, request).unwrap();
     }
-    let program = client::client::get_program(&keypair, &connection).unwrap();
     client::client::create_greeting_account(&player, &program, &connection).unwrap();
     client::client::say_hello(&player, &program, &connection).unwrap();
     println!(

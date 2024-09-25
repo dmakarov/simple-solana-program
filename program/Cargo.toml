@@ -1,24 +1,12 @@
 [package]
-name = "program"
+name = "greetings"
 version = "0.1.0"
 edition = "2021"
 
-[features]
-# https://docs.solana.com/developing/on-chain-programs/developing-rust#project-layout
-#
-# When toggled on this feature will cause the crate to not compile a
-# bpf entrypoint.
-#
-# See the corresponding `#[cfg(not(feature = "exclude_entrypoint"))]`
-# in lib.rs. This is needed so that other Solana programs can import
-# helper functions from this library without causing symbol conflicts
-# with our entrypoint.
-exclude_entrypoint = []
-
 [dependencies]
-solana-program = { git = "https://github.com/anza-xyz/agave.git", version = "2.0.0" }
-borsh = "0.9"
+borsh = { version = "1.5.1", features = ["derive", "unstable__schema"] }
+solana-program = { git = "https://github.com/anza-xyz/agave.git", version = "2.1.0" }
 
 [lib]
-name = "helloworld"
+name = "greetings"
 crate-type = ["cdylib", "lib"]

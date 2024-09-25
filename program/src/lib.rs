@@ -17,7 +17,6 @@ pub struct GreetingAccount {
 
 /// Declare the programs entrypoint. The entrypoint is the function
 /// that will get run when the program is executed.
-#[cfg(not(feature = "exclude_entrypoint"))]
 entrypoint!(process_instruction);
 
 /// Logic that runs when the program is executed. This program expects

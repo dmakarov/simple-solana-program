@@ -35,10 +35,7 @@ pub fn establish_connection(url: &Option<String>, config: &Option<String>) -> Re
 pub fn get_balance_requirement(connection: &RpcClient) -> Result<u64> {
     let account_fee =
         connection.get_minimum_balance_for_rent_exemption(utils::get_greeting_data_size()?)?;
-
-    let (_, fee_calculator) = connection.get_recent_blockhash()?;
-    let transaction_fee = fee_calculator.lamports_per_signature * 100;
-
+    let transaction_fee = 100 * 50;
     Ok(transaction_fee + account_fee)
 }
 
